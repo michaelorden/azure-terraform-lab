@@ -102,7 +102,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                = "ubuntu-vm"
   resource_group_name = azurerm_resource_group.lab.name
   location            = azurerm_resource_group.lab.location
-  size                = "FX-Series v2"
+  size                = "Standard_B2s"
 
   admin_username = "azureuser"
 
