@@ -1,34 +1,42 @@
-output "resource_group_name" {
-  description = "Resource Group Name"
-  value       = azurerm_resource_group.lab.name
-}
+name: Terraform Azure Deployment
 
-output "virtual_network_name" {
-  description = "Virtual Network Name"
-  value       = azurerm_virtual_network.vnet.name
-}
+on:
+  push:
+    branches:
+      - main
 
-output "subnet_name" {
-  description = "Subnet Name"
-  value       = azurerm_subnet.subnet.name
-}
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
 
-output "network_security_group_name" {
-  description = "Network Security Group Name"
-  value       = azurerm_network_security_group.nsg.name
-}
+    defaults:
+      run:
+        working-directory: .
 
-output "virtual_machine_name" {
-  description = "Virtual Machine Name"
-  value       = azurerm_linux_virtual_machine.vm.name
-}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-output "public_ip_address" {
-  description = "Public IP Address"
-  value       = azurerm_public_ip.pip.ip_address
-}
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
 
-output "private_ip_address" {
-  description = "Private IP Address"
-  value       = azurerm_network_interface.nic.private_ip_address
-}
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Format Check
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve
