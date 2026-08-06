@@ -38,8 +38,11 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
+        env:
+            TF_VAR_admin_password: ${{ secrets.TF_VAR_admin_password }}
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve tfplan
+        env:
+            TF_VAR_admin_password: ${{ secrets.TF_VAR_admin_password }}
+         run: terraform apply -auto-approve tfplan
