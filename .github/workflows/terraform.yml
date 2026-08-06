@@ -7,6 +7,7 @@ on:
 
 jobs:
   terraform:
+    name: Terraform Deployment
     runs-on: ubuntu-latest
 
     defaults:
@@ -14,11 +15,13 @@ jobs:
         working-directory: .
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.0
 
       - name: Azure Login
         uses: azure/login@v2
@@ -35,8 +38,8 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -out=tfplan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve tfplan
