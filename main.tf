@@ -1,7 +1,7 @@
 # Resource Group
 resource "azurerm_resource_group" "lab" {
   name     = "rg-azure-lab"
-  location = "Australia East"
+  location = "Australia Southeast"
 }
 
 # Virtual Network
