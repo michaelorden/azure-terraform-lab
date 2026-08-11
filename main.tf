@@ -1,4 +1,4 @@
-```hcl
+
 # Azure Resource Group
 resource "azurerm_resource_group" "lab" {
   name     = "rg-azure-lab"
@@ -108,4 +108,3 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 }
-```
