@@ -1,4 +1,5 @@
-# Resource Group
+```hcl
+# Azure Resource Group
 resource "azurerm_resource_group" "lab" {
   name     = "rg-azure-lab"
   location = "Australia East"
@@ -34,7 +35,7 @@ resource "azurerm_network_security_group" "nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix     = "*"
+    source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
 
@@ -46,7 +47,7 @@ resource "azurerm_network_security_group" "nsg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "80"
-    source_address_prefix     = "*"
+    source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
 }
@@ -74,21 +75,20 @@ resource "azurerm_network_interface" "nic" {
   }
 }
 
-# Associate NSG with Network Interface
+# NSG Association
 resource "azurerm_network_interface_security_group_association" "assoc" {
   network_interface_id      = azurerm_network_interface.nic.id
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
-# Linux Virtual Machine
+# Ubuntu Linux Virtual Machine
 resource "azurerm_linux_virtual_machine" "vm" {
   name                = "ubuntu-vm"
   resource_group_name = azurerm_resource_group.lab.name
   location            = azurerm_resource_group.lab.location
   size                = "Standard_B2s_v2"
 
-  admin_username = "azureuser"
-
+  admin_username                  = "azureuser"
   disable_password_authentication = false
   admin_password                  = var.admin_password
 
@@ -108,3 +108,4 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 }
+```
